@@ -4,6 +4,6 @@
   "private": true,
   "description": "Cadastro e Área do Aluno GASCTPNA",
   "scripts": {
-    "start": "npx serve -s ."
+    "start": "npx serve ."
   }
 }

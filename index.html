@@ -935,7 +935,7 @@
             setTimeout(() => {
                 const userEmail = localStorage.getItem('usuario_email') || '';
                 const userPass = localStorage.getItem('usuario_senha') || '';
-                let redirUrl = 'https://plataformaintegra.com.br/login.html';
+                let redirUrl = 'https://plataformaintegra.com.br/login';
                 if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname.includes('vercel.app')) {
                     redirUrl = 'login.html';
                 }
