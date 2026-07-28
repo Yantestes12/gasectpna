@@ -773,10 +773,10 @@
             speak(`Passo ${currentStep} de 4 exibido.`);
         }
 
-        // Função para verificar se e-mail já existe via Webhook
+        // Função para verificar se e-mail já existe via Webhook (incluindo instituicao e instituto GASCTPNA)
         async function checkEmailExists(email) {
             try {
-                const url = 'https://w.ibrase.com.br/webhook/existeemail?email=' + encodeURIComponent(email);
+                const url = 'https://w.ibrase.com.br/webhook/existeemail?email=' + encodeURIComponent(email) + '&instituicao=GASCTPNA&instituto=GASCTPNA';
                 const res = await fetch(url);
                 const text = await res.text();
                 const cleanText = text.trim().toLowerCase();
@@ -787,12 +787,56 @@
             }
         }
 
+        // Função para verificar se número de telefone/WhatsApp já existe via Webhook
+        async function checkPhoneExists(phone) {
+            try {
+                const cleanPhone = (phone || '').replace(/\D/g, '');
+                if (!cleanPhone || cleanPhone.length < 10) return false;
+                const url = 'https://w.ibrase.com.br/webhook/existetelefone?telefone=' + encodeURIComponent(cleanPhone) + '&phone=' + encodeURIComponent(cleanPhone) + '&instituicao=GASCTPNA&instituto=GASCTPNA';
+                const res = await fetch(url);
+                const text = await res.text();
+                const cleanText = text.trim().toLowerCase();
+                return cleanText.includes('existe') && !cleanText.includes('não existe');
+            } catch (err) {
+                console.error('Erro ao verificar existência do telefone:', err);
+                return false;
+            }
+        }
+
         btnNext.addEventListener('click', async () => {
             if (!validateCurrentStep()) {
                 speak('Por favor, corrija o campo antes de avançar.');
                 const firstInvalid = document.querySelector('.step-pane.active .invalid');
                 if (firstInvalid) firstInvalid.focus();
                 return;
+            }
+
+            // Se for a etapa de telefone (Passo 2), consultar se o telefone já existe no banco
+            if (currentStep === 2) {
+                const phoneVal = phoneInput.value.replace(/\D/g, '');
+                btnNext.disabled = true;
+                btnNext.innerHTML = '<i data-lucide="loader-2" aria-hidden="true" style="animation: spin 1s linear infinite;"></i> Verificando...';
+                lucide.createIcons();
+
+                const existsPhone = await checkPhoneExists(phoneVal);
+
+                btnNext.disabled = false;
+                btnNext.innerHTML = 'Avançar <i data-lucide="arrow-right" aria-hidden="true"></i>';
+                lucide.createIcons();
+
+                if (existsPhone) {
+                    const errEl = document.getElementById('err-phone');
+                    if (errEl) {
+                        errEl.innerHTML = '<i data-lucide="alert-circle" aria-hidden="true"></i> Este número de telefone/WhatsApp já está cadastrado no sistema. Por favor, utilize outro telefone ou faça login.';
+                        errEl.classList.add('active');
+                        lucide.createIcons();
+                    }
+                    phoneInput.classList.add('invalid');
+                    phoneInput.setAttribute('aria-invalid', 'true');
+                    phoneInput.focus();
+                    speak('Atenção: Este telefone já está cadastrado no sistema.');
+                    return;
+                }
             }
 
             // Se for a etapa de e-mail (Passo 3), consultar se o e-mail já existe no banco
@@ -863,6 +907,7 @@
 
             const payload = {
                 instituicao: 'GASCTPNA',
+                instituto: 'GASCTPNA',
                 acao: 'criar_acesso',
                 name: nameInput.value.trim(),
                 phone: phoneInput.value.replace(/\D/g, ''),
