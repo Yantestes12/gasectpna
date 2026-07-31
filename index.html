@@ -947,50 +947,56 @@
                 });
                 
                 salvarSessaoLocal();
-                showSuccessScreen();
+                showSuccessScreen(payload);
             } catch (err) {
                 console.error('Erro no envio:', err);
                 salvarSessaoLocal();
-                showSuccessScreen();
+                showSuccessScreen(payload);
             }
         });
 
-        function showSuccessScreen() {
+        function showSuccessScreen(pData = {}) {
             speak('Cadastro concluído com sucesso!');
             const card = document.querySelector('.access-card');
-            card.innerHTML = `
-                <div class="success-box" role="region" aria-live="assertive">
-                    <div class="success-icon" aria-hidden="true">
-                        <i data-lucide="check" style="width: 40px; height: 40px;"></i>
+            if (card) {
+                card.innerHTML = `
+                    <div class="success-box" role="region" aria-live="assertive">
+                        <div class="success-icon" aria-hidden="true">
+                            <i data-lucide="check" style="width: 40px; height: 40px;"></i>
+                        </div>
+                        <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Cadastro Realizado! 🎉</h2>
+                        <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 20px;">
+                            Seus dados foram salvos com sucesso.<br>Redirecionando para o sistema...
+                        </p>
                     </div>
-                    <h2 style="font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Cadastro Realizado! 🎉</h2>
-                    <p style="color: var(--text-muted); font-size: 15px; margin-bottom: 20px;">
-                        Seus dados foram salvos com sucesso.<br>Redirecionando para a área do aluno...
-                    </p>
-                </div>
-            `;
-            lucide.createIcons();
-
-            if (emailInput && emailInput.value) {
-                localStorage.setItem('usuario_email', emailInput.value.trim().toLowerCase());
-                localStorage.setItem('email_conta', emailInput.value.trim().toLowerCase());
+                `;
             }
-            if (nameInput && nameInput.value) {
-                localStorage.setItem('usuario_nome', nameInput.value.trim());
+            if (window.lucide) lucide.createIcons();
+
+            const userEmail = (pData && pData.email) || (emailInput && emailInput.value ? emailInput.value.trim().toLowerCase() : '') || localStorage.getItem('usuario_email') || '';
+            const userPass = (pData && pData.password) || (passwordInput ? passwordInput.value : '') || '';
+
+            if (userEmail) {
+                localStorage.setItem('usuario_email', userEmail);
+                localStorage.setItem('email_conta', userEmail);
+            }
+            if (userPass) {
+                localStorage.setItem('usuario_senha', userPass);
             }
 
             setTimeout(() => {
-                const userEmail = payload.email || localStorage.getItem('usuario_email') || '';
-                const userPass = payload.password || '';
-                let redirUrl = 'https://plataformaintegra.com.br/login';
-                if (window.location.protocol === 'file:' || window.location.hostname === 'localhost' || window.location.hostname.includes('vercel.app')) {
-                    redirUrl = 'login.html';
+                let redirUrl = 'index.html';
+                if (window.location.hostname.includes('plataformaintegra.com.br') || window.location.hostname.includes('gasctpna.com.br')) {
+                    redirUrl = 'https://plataformaintegra.com.br/login';
+                } else if (window.location.protocol === 'file:' || window.location.hostname === 'localhost') {
+                    redirUrl = 'index.html';
                 }
+                
                 if (userEmail && userPass) {
-                    redirUrl += (redirUrl.includes('?') ? '&' : '?') + `email=${encodeURIComponent(userEmail)}&password=${encodeURIComponent(userPass)}`;
+                    redirUrl += (redirUrl.includes('?') ? '&' : '?') + `email=${encodeURIComponent(userEmail)}&password=${encodeURIComponent(userPass)}&autologin=true`;
                 }
                 window.location.href = redirUrl;
-            }, 1800);
+            }, 1200);
         }
     </script>
 </body>
