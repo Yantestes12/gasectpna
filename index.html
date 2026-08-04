@@ -927,6 +927,8 @@
                 localStorage.setItem('usuario_email', payload.email);
                 localStorage.setItem('email_conta', payload.email);
                 localStorage.setItem('usuario_telefone', payload.phone);
+                localStorage.setItem('instituto', payload.instituto);
+                localStorage.setItem('instituicao', payload.instituicao);
                 // [SEGURANÇA] Senha removida do armazenamento local.
                 localStorage.removeItem('usuario_senha');
                 try { document.cookie = 'usuario_senha=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/'; } catch(e){}
@@ -936,6 +938,7 @@
                 setCookie('usuario_email', payload.email);
                 setCookie('email_conta', payload.email);
                 setCookie('usuario_telefone', payload.phone);
+                setCookie('instituto', payload.instituto);
                 // Senha não é mais armazenada em cookie
             }
 
