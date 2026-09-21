@@ -1446,6 +1446,20 @@
                             </select>
                         </div>
                     </div>
+
+                    <!-- 5. Informações Complementares da Modalidade (Perguntas Extras Dinâmicas) -->
+                    <div id="containerPerguntasExtras" style="display: none; margin-top: 24px; padding-top: 18px; border-top: 1.5px dashed var(--border-pencil);">
+                        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                            <span style="display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 6px; background: rgba(49, 146, 68, 0.12); color: var(--c-verde-escuro); font-size: 13px; font-weight: 800;">★</span>
+                            <h4 style="font-size: 14px; font-weight: 800; color: var(--c-verde-escuro); margin: 0;">
+                                Informações Complementares da Modalidade
+                            </h4>
+                        </div>
+                        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 14px;">
+                            Responda aos itens abaixo específicos para a sua categoria ou modalidade escolhida.
+                        </p>
+                        <div id="perguntasExtrasFields"></div>
+                    </div>
                 </div>
 
                 <!-- ETAPA 4: Declaração Institucional e Termo LGPD -->
@@ -2148,6 +2162,9 @@
             document.getElementById('hidden_projeto_id').value = projId;
             document.getElementById('hidden_projeto_nome').value = projNome;
 
+            // Reseta perguntas complementares da modalidade
+            atualizarPerguntasExtrasDaModalidade(null, null);
+
             // ══════════════════════════════════════════════════
             // PRÉ-PREENCHIMENTO COMPLETO (dados do último cadastro)
             // ══════════════════════════════════════════════════
@@ -2408,6 +2425,9 @@
                     }
                     document.getElementById('hidden_modalidade_nome').value = modNome;
                     document.getElementById('hidden_bairro_escolhido').value = bairroNome;
+
+                    // Renderiza perguntas adicionais configuradas para a modalidade/projeto
+                    atualizarPerguntasExtrasDaModalidade(n.modalidade_id, modNome);
                 });
 
                 // Auto-seleciona o primeiro núcleo se houver apenas 1
@@ -2489,6 +2509,21 @@
                 payload.origem = 'portal_matricula_minimalista';
                 payload.timestamp = new Date().toISOString();
                 delete payload.email_confirm;
+
+                // Coleta de respostas das perguntas complementares/extras
+                const respostasExtras = {};
+                document.querySelectorAll('#containerPerguntasExtras [data-extra-field]').forEach(input => {
+                    const qId = input.getAttribute('data-extra-id');
+                    const titulo = input.getAttribute('data-extra-titulo');
+                    if (input.type === 'radio') {
+                        if (input.checked) {
+                            respostasExtras[qId] = { titulo: titulo, resposta: input.value };
+                        }
+                    } else if (input.value && input.value.trim()) {
+                        respostasExtras[qId] = { titulo: titulo, resposta: input.value.trim() };
+                    }
+                });
+                payload.respostas_extras = JSON.stringify(respostasExtras);
 
                 // Garante que data_nascimento e idade enviadas sejam consistentes
                 if (payload.data_nascimento) {
@@ -2653,11 +2688,25 @@
                 }
             }
 
-            // Validação da Etapa 3 (Núcleo Selecionado)
+            // Validação da Etapa 3 (Núcleo Selecionado & Perguntas Complementares)
             if (passo === 3) {
                 const nId = document.getElementById('hidden_nucleo_id').value;
                 if (!nId) {
                     alert('Por favor, clique em um dos quadradinhos de núcleo disponíveis.');
+                    return false;
+                }
+
+                // Validação de perguntas extras tipo radio obrigatórias
+                const extraRadios = stepEl.querySelectorAll('input[type="radio"][data-extra-field][required]');
+                const pendingRadios = new Set();
+                extraRadios.forEach(r => {
+                    const checked = stepEl.querySelector(`input[name="${r.name}"]:checked`);
+                    if (!checked && !pendingRadios.has(r.name)) {
+                        pendingRadios.add(r.name);
+                    }
+                });
+                if (pendingRadios.size > 0) {
+                    alert('Por favor, responda a todas as perguntas complementares obrigatórias (*).');
                     return false;
                 }
             }
@@ -3081,6 +3130,17 @@
             const updatedAtStr = d.updated_at ? new Date(d.updated_at).toLocaleString('pt-BR') : dataHoraHoje;
             const protocolo = 'INT-' + numMatricula.padStart(6, '0') + '-' + Math.random().toString(36).substring(2, 6).toUpperCase();
 
+            // Extração de perguntas e respostas complementares
+            let extrasObj = {};
+            if (d.respostas_extras) {
+                try {
+                    extrasObj = typeof d.respostas_extras === 'string' ? JSON.parse(d.respostas_extras) : d.respostas_extras;
+                } catch(e) {
+                    extrasObj = {};
+                }
+            }
+            const extrasList = Object.values(extrasObj).filter(item => item && (item.titulo || item.pergunta) && item.resposta);
+
             win.document.open();
             win.document.write(`
                 <!DOCTYPE html>
@@ -3173,9 +3233,19 @@
                         </div>
                     </div>
 
+                    ${extrasList.length > 0 ? `
+                    <div class="box">
+                        <div class="box-title">4. Informações Complementares da Modalidade</div>
+                        <div class="grid-2">
+                            ${extrasList.map(item => `
+                                <div class="f-item"><span class="f-lbl">${escapeHTML(item.titulo || item.pergunta)}:</span> <strong>${escapeHTML(item.resposta)}</strong></div>
+                            `).join('')}
+                        </div>
+                    </div>` : ''}
+
                     ${nResp ? `
                     <div class="box">
-                        <div class="box-title">4. Responsável Legal (Menor de Idade)</div>
+                        <div class="box-title">${extrasList.length > 0 ? '5' : '4'}. Responsável Legal (Menor de Idade)</div>
                         <div class="grid-3">
                             <div class="f-item"><span class="f-lbl">Nome Responsável:</span> ${nResp}</div>
                             <div class="f-item"><span class="f-lbl">CPF:</span> ${cResp}</div>
@@ -3304,6 +3374,124 @@
             if (isNaN(d.getTime())) return null;
             const diff = Date.now() - d.getTime();
             return Math.floor(diff / (1000 * 60 * 60 * 24 * 365.25));
+        }
+
+        
+        // ── Funções de Apoio a Perguntas Complementares da Modalidade ──
+        function escapeHTML(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function atualizarPerguntasExtrasDaModalidade(modId, modNome) {
+            const container = document.getElementById('containerPerguntasExtras');
+            const fieldsWrap = document.getElementById('perguntasExtrasFields');
+            if (!container || !fieldsWrap) return;
+
+            const projId = document.getElementById('hidden_projeto_id')?.value;
+            const projObj = (currentProjectsList || []).find(p => String(p.id) === String(projId));
+
+            let perguntas = [];
+            if (projObj && projObj.perguntas_extras) {
+                try {
+                    perguntas = typeof projObj.perguntas_extras === 'string' 
+                        ? JSON.parse(projObj.perguntas_extras) 
+                        : projObj.perguntas_extras;
+                } catch(e) {
+                    perguntas = [];
+                }
+            }
+
+            if (!Array.isArray(perguntas) || perguntas.length === 0) {
+                container.style.display = 'none';
+                fieldsWrap.innerHTML = '';
+                return;
+            }
+
+            // Filtra perguntas: gerais OU específicas da modalidade selecionada
+            const aplicaveis = perguntas.filter(q => {
+                if (!q.modalidade_id || q.modalidade_id === 'todas') return true;
+                if (modId && String(q.modalidade_id) === String(modId)) return true;
+                if (modNome && q.modalidade_nome && String(q.modalidade_nome).trim().toLowerCase() === String(modNome).trim().toLowerCase()) return true;
+                return false;
+            });
+
+            if (aplicaveis.length === 0) {
+                container.style.display = 'none';
+                fieldsWrap.innerHTML = '';
+                return;
+            }
+
+            // Preserva respostas já preenchidas
+            const respostasAtuais = {};
+            document.querySelectorAll('#perguntasExtrasFields [data-extra-field]').forEach(input => {
+                const qId = input.getAttribute('data-extra-id');
+                if (input.type === 'radio') {
+                    if (input.checked) respostasAtuais[qId] = input.value;
+                } else {
+                    if (input.value) respostasAtuais[qId] = input.value;
+                }
+            });
+
+            fieldsWrap.innerHTML = '';
+            aplicaveis.forEach((q, idx) => {
+                const itemBox = document.createElement('div');
+                itemBox.className = 'form-group';
+                itemBox.style.marginBottom = '14px';
+
+                const qId = q.id || `extra_q_${idx}`;
+                const reqBadge = q.obrigatorio ? '<span class="req">*</span>' : '<span style="font-size: 11px; font-weight: normal; color: var(--c-marrom-claro);">(opcional)</span>';
+                const ajudaHtml = q.ajuda ? `<div style="font-size: 11.5px; color: var(--text-muted); margin-top: 2px;">${escapeHTML(q.ajuda)}</div>` : '';
+                const valorAnterior = respostasAtuais[qId] || '';
+
+                let inputHtml = '';
+                if (q.tipo === 'select') {
+                    inputHtml = `
+                        <select id="extra_${qId}" data-extra-field="true" data-extra-id="${qId}" data-extra-titulo="${escapeQuotes(q.titulo)}" class="field-select" ${q.obrigatorio ? 'required' : ''}>
+                            <option value="">Selecione uma opção…</option>
+                            ${(q.opcoes || []).map(opt => `<option value="${escapeQuotes(opt)}" ${valorAnterior === opt ? 'selected' : ''}>${escapeHTML(opt)}</option>`).join('')}
+                        </select>
+                    `;
+                } else if (q.tipo === 'radio') {
+                    inputHtml = `
+                        <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;">
+                            ${(q.opcoes || []).map((opt, oIdx) => `
+                                <label style="display: inline-flex; align-items: center; gap: 6px; padding: 7px 12px; border: 1.5px solid var(--border-pencil); border-radius: 8px; cursor: pointer; font-size: 13px; background: #fff; transition: all 0.2s ease;">
+                                    <input type="radio" name="extra_radio_${qId}" data-extra-field="true" data-extra-id="${qId}" data-extra-titulo="${escapeQuotes(q.titulo)}" value="${escapeQuotes(opt)}" ${valorAnterior === opt ? 'checked' : ''} ${q.obrigatorio ? 'required' : ''} style="accent-color: var(--c-verde);">
+                                    <span>${escapeHTML(opt)}</span>
+                                </label>
+                            `).join('')}
+                        </div>
+                    `;
+                } else if (q.tipo === 'number') {
+                    inputHtml = `
+                        <input type="number" id="extra_${qId}" data-extra-field="true" data-extra-id="${qId}" data-extra-titulo="${escapeQuotes(q.titulo)}" class="field-input" placeholder="Informe o valor numérico" value="${escapeQuotes(valorAnterior)}" ${q.obrigatorio ? 'required' : ''}>
+                    `;
+                } else {
+                    inputHtml = `
+                        <input type="text" id="extra_${qId}" data-extra-field="true" data-extra-id="${qId}" data-extra-titulo="${escapeQuotes(q.titulo)}" class="field-input" placeholder="Sua resposta" value="${escapeQuotes(valorAnterior)}" ${q.obrigatorio ? 'required' : ''}>
+                    `;
+                }
+
+                itemBox.innerHTML = `
+                    <label class="field-label" for="extra_${qId}">
+                        ${escapeHTML(q.titulo)} ${reqBadge}
+                    </label>
+                    ${ajudaHtml}
+                    <div style="margin-top: 4px;">
+                        ${inputHtml}
+                    </div>
+                `;
+
+                fieldsWrap.appendChild(itemBox);
+            });
+
+            container.style.display = 'block';
         }
 
         function escapeQuotes(str) {
