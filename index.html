@@ -2068,25 +2068,31 @@
             document.getElementById('btnConsultarCPF').disabled = true;
 
             try {
-                // 1. Busca cadastro de pessoa física / CPF
+                // 1. Busca cadastro de pessoa física / CPF com timeout rápido (3.5s) para não travar se o Hub cair
                 const url = `${API.consultarCPF}?cpf=${encodeURIComponent(cpfNum)}&instituicao=GASCTPNA&instituto=GASCTPNA`;
                 let dadosAluno = null;
 
                 try {
-                    const resp = await fetch(url);
+                    const ctrlCPF = new AbortController();
+                    const timerCPF = setTimeout(() => ctrlCPF.abort(), 3500);
+                    const resp = await fetch(url, { signal: ctrlCPF.signal });
+                    clearTimeout(timerCPF);
                     const json = await resp.json();
                     const item = Array.isArray(json) ? json[0] : json;
                     dadosAluno = item?.result || item?.dados || item;
                     if (item?.projetos_inscritos_ids) dadosAluno.projetos_inscritos_ids = item.projetos_inscritos_ids;
                     if (item?.dados_recentes) dadosAluno.dados_recentes = item.dados_recentes;
                 } catch(e) {
-                    console.warn('Consulta do aluno via webhook falhou:', e);
+                    console.warn('Consulta do aluno via webhook demorou ou falhou, prosseguindo com digitação manual:', e);
                 }
 
-                // 2. Busca todas as matrículas ativas no instituto GASCTPNA
+                // 2. Busca histórico de matrículas ativas (timeout de 2.5s para não atrasar a tela)
                 let matriculasEncontradas = [];
                 try {
-                    const respM = await fetch(API.buscarMatriculas);
+                    const ctrlMat = new AbortController();
+                    const timerMat = setTimeout(() => ctrlMat.abort(), 2500);
+                    const respM = await fetch(API.buscarMatriculas, { signal: ctrlMat.signal });
+                    clearTimeout(timerMat);
                     const dataM = await respM.json();
                     const lista = Array.isArray(dataM) ? dataM : (dataM?.data || []);
                     matriculasEncontradas = lista.filter(m => {
@@ -2094,7 +2100,7 @@
                         return mCpf === cpfNum;
                     });
                 } catch(e) {
-                    console.warn('Histórico de matrículas indisponível:', e);
+                    console.warn('Histórico de matrículas indisponível ou lento:', e);
                 }
 
                 currentMatriculasList = matriculasEncontradas;
