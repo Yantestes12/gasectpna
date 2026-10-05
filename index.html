@@ -2078,7 +2078,7 @@
          ========================================================================== -->
     <script>
         // ── CONTROLE AUTOMÁTICO DE VERSÃO & LIMPEZA DE CACHE ──
-        const APP_BUILD_VERSION = '2026.09.23_gasctpna_v5';
+        const APP_BUILD_VERSION = '2026.10.05_gasctpna_v6';
         try {
             const lastVer = localStorage.getItem('gasctpna_app_version');
             if (lastVer !== APP_BUILD_VERSION) {
@@ -2105,48 +2105,532 @@
 
         // ── CATÁLOGO OFICIAL DE NÚCLEOS E ESPAÇOS GASCTPNA (INFALÍVEL - ZERO DOWNTIME) ──
         const NUCLEOS_CATALOGO_OFICIAL = [
-            { "id": 39, "projeto_id": 5, "nome": "Centro", "modalidade_id": 16, "espaco_id": 21, "bairro": "Centro", "cidade": "São João da Barra", "ponto_referencia": "Ginásio Arlindo Aquino", "ativo": true },
-            { "id": 41, "projeto_id": 5, "nome": "Chatuba", "modalidade_id": 16, "espaco_id": 28, "bairro": "Chatuba", "cidade": "São João da Barra", "ponto_referencia": "CT Espartanos", "ativo": true },
-            { "id": 42, "projeto_id": 5, "nome": "KM 14 (Travessão)", "modalidade_id": 9, "espaco_id": 27, "bairro": "KM 14 (Travessão)", "cidade": "Campos dos Goytacazes", "ponto_referencia": "Praça João Pedro", "ativo": true },
-            { "id": 38, "projeto_id": 5, "nome": "Vila Nova", "modalidade_id": 16, "espaco_id": 24, "bairro": "Vila Nova", "cidade": "Conceição de Macabu", "ponto_referencia": "Academia Superação", "ativo": true },
-            { "id": 40, "projeto_id": 5, "nome": "Batelão (Barra Seca)", "modalidade_id": 9, "espaco_id": 23, "bairro": "Batelão (Barra Seca)", "cidade": "São Francisco de Itabapoana", "ponto_referencia": "Tavares Futebol Society", "ativo": true },
-            { "id": 61, "projeto_id": 5, "nome": "Parque São Caetano", "modalidade_id": 5, "espaco_id": 36, "bairro": "Parque São Caetano", "cidade": "Campos dos Goytacazes", "ponto_referencia": "Rua Tenente Amaro Barreto", "ativo": true },
-            { "id": 44, "projeto_id": 5, "nome": "Conselheiro Josino", "modalidade_id": 9, "espaco_id": 22, "bairro": "Conselheiro Josino", "cidade": "Campos dos Goytacazes", "ponto_referencia": "Campo do Quilombo", "ativo": true },
-            { "id": 37, "projeto_id": 5, "nome": "Saturnino Braga", "modalidade_id": 9, "espaco_id": 25, "bairro": "Saturnino Braga", "cidade": "Campos dos Goytacazes", "ponto_referencia": "Rodovia Dep. Paulo Albernaz", "ativo": true },
-            { "id": 60, "projeto_id": 4, "nome": "Goitacazes", "modalidade_id": 5, "espaco_id": 37, "bairro": "Goitacazes", "cidade": "Campos dos Goytacazes", "ponto_referencia": "Núcleo Goitacazes", "ativo": true },
-            { "id": 62, "projeto_id": 4, "nome": "Magalhães Bastos", "modalidade_id": 5, "espaco_id": 38, "bairro": "Magalhães Bastos", "cidade": "Rio de Janeiro", "ponto_referencia": "Praça Bruno Lisboa / Lona Cultural", "ativo": true },
-            { "id": 63, "projeto_id": 4, "nome": "Moquetá", "modalidade_id": 5, "espaco_id": 39, "bairro": "Moquetá", "cidade": "Nova Iguaçu", "ponto_referencia": "UFRRJ Campus Nova Iguaçu", "ativo": true },
-            { "id": 65, "projeto_id": 4, "nome": "Jardim Palmares", "modalidade_id": 9, "espaco_id": 41, "bairro": "Jardim Palmares", "cidade": "Nova Iguaçu", "ponto_referencia": "Rua da Mangueira", "ativo": true },
-            { "id": 64, "projeto_id": 4, "nome": "Vargem Pequena", "modalidade_id": 5, "espaco_id": 40, "bairro": "Vargem Pequena", "cidade": "Rio de Janeiro", "ponto_referencia": "Rua da Clínica da Família", "ativo": true },
-            { "id": 45, "projeto_id": 5, "nome": "Santa Cruz", "modalidade_id": 9, "espaco_id": 34, "bairro": "Santa Cruz", "cidade": "Campos dos Goytacazes", "ponto_referencia": "Campo União de Santa Cruz", "ativo": true },
-            { "id": 43, "projeto_id": 5, "nome": "Jóquei", "modalidade_id": 9, "espaco_id": 33, "bairro": "Jóquei", "cidade": "Campos dos Goytacazes", "ponto_referencia": "Av. Presidente Kennedy, 85", "ativo": true },
-            { "id": 66, "projeto_id": 4, "nome": "Parque Anchieta", "modalidade_id": 5, "espaco_id": 42, "bairro": "Parque Anchieta", "cidade": "Rio de Janeiro", "ponto_referencia": "Praça Granito/ em cima da lanchonete Ravis", "ativo": true },
-            { "id": 68, "projeto_id": 4, "nome": "Taquara", "modalidade_id": 5, "espaco_id": 43, "bairro": "Taquara", "cidade": "Rio de Janeiro", "ponto_referencia": "Em frente a antiga pensão da Cris", "ativo": true },
-            { "id": 69, "projeto_id": 4, "nome": "Jacaroá", "modalidade_id": 5, "espaco_id": 44, "bairro": "Jacaroá", "cidade": "Maricá", "ponto_referencia": "Em frente a vila de pescador de Jacaroá", "ativo": true }
-        ];
+        {
+                "id": 69,
+                "projeto_id": 4,
+                "nome": "Jacaroá",
+                "modalidade_id": 5,
+                "espaco_id": 44,
+                "bairro": "Jacaroá",
+                "cidade": "Maricá",
+                "ponto_referencia": "Em frente a vila de pescador de Jacaroá",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 42,
+                "projeto_id": 5,
+                "nome": "KM 15 (Travessão)",
+                "modalidade_id": 9,
+                "espaco_id": 27,
+                "bairro": "KM 15",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Loteamento rua 7",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "15",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 65,
+                "projeto_id": 4,
+                "nome": "Jardim Palmares",
+                "modalidade_id": 9,
+                "espaco_id": 41,
+                "bairro": "Jardim Palmares",
+                "cidade": "Nova Iguaçu",
+                "ponto_referencia": "Próximo ao mercado casa do sabão",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 64,
+                "projeto_id": 4,
+                "nome": "Vargem Pequena",
+                "modalidade_id": 5,
+                "espaco_id": 40,
+                "bairro": "Vargem Pequena",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Rua da Clínica da família",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "23",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 61,
+                "projeto_id": 5,
+                "nome": "Parque São Caetano",
+                "modalidade_id": 16,
+                "espaco_id": 36,
+                "bairro": "Parque São Caetano",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Ao lado da casa número 326",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "11",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 60,
+                "projeto_id": 4,
+                "nome": "Goitacazes",
+                "modalidade_id": 7,
+                "espaco_id": 37,
+                "bairro": "Goitacazes",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "",
+                "ativo": false,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 44,
+                "projeto_id": 5,
+                "nome": "Conselheiro Josino",
+                "modalidade_id": 9,
+                "espaco_id": 22,
+                "bairro": "Conselheiro Josino",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "No Campo do Quilombo. Google Maps: 21°29'54.3\"S 41°18'55.0\"W",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "8",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 39,
+                "projeto_id": 5,
+                "nome": "Centro",
+                "modalidade_id": 16,
+                "espaco_id": 21,
+                "bairro": "Centro",
+                "cidade": "São João da Barra",
+                "ponto_referencia": "Ginásio de Eventos Esportivos e Culturais Arlindo Aquino",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "56",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 45,
+                "projeto_id": 5,
+                "nome": "Santa Cruz",
+                "modalidade_id": 9,
+                "espaco_id": 34,
+                "bairro": "Santa Cruz",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "No Campo União de Santa Cruz",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "25",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 40,
+                "projeto_id": 5,
+                "nome": "Batelão (Barra Seca)",
+                "modalidade_id": 9,
+                "espaco_id": 23,
+                "bairro": "Batelão (Barra Seca)",
+                "cidade": "São Francisco de Itabapoana",
+                "ponto_referencia": "Tavares Futebol Socyte.",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "13",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 66,
+                "projeto_id": 4,
+                "nome": "Parque Anchieta",
+                "modalidade_id": 5,
+                "espaco_id": 42,
+                "bairro": "Parque Anchieta",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Praça Granito/ em cima da lanchonete Ravis",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 62,
+                "projeto_id": 4,
+                "nome": "Magalhães Bastos",
+                "modalidade_id": 5,
+                "espaco_id": 38,
+                "bairro": "Magalhães Bastos",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Nos altos, na praça  Bruno de Almeida Lisboa, ao lado da lona cultural.",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "68",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 68,
+                "projeto_id": 4,
+                "nome": "Taquara",
+                "modalidade_id": 5,
+                "espaco_id": 43,
+                "bairro": "Taquara",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "Em frente a antiga pensão da Cris",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "1",
+                "aceitando_vagas": true
+        },
+        {
+                "id": 70,
+                "projeto_id": 4,
+                "nome": "CAMPO LINDO",
+                "modalidade_id": 9,
+                "espaco_id": 45,
+                "bairro": "CAMPO LINDO",
+                "cidade": "Seropédica",
+                "ponto_referencia": "Campo do Olaria",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 71,
+                "projeto_id": 4,
+                "nome": "Realengo",
+                "modalidade_id": 9,
+                "espaco_id": 46,
+                "bairro": "Realengo",
+                "cidade": "Rio de Janeiro",
+                "ponto_referencia": "dentro do Sítio do Beto",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "0",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 63,
+                "projeto_id": 4,
+                "nome": "Moquetá",
+                "modalidade_id": 9,
+                "espaco_id": 39,
+                "bairro": "Moquetá",
+                "cidade": "Nova Iguaçu",
+                "ponto_referencia": "UFRRJ Campus Nova Iguaçu",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "9",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 37,
+                "projeto_id": 5,
+                "nome": "Saturnino Braga",
+                "modalidade_id": 5,
+                "espaco_id": 25,
+                "bairro": "Saturnino Braga",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Ao lado da loja Paulinha Fashion.",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "34",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 38,
+                "projeto_id": 5,
+                "nome": "Vila Nova",
+                "modalidade_id": 16,
+                "espaco_id": 24,
+                "bairro": "Vila Nova",
+                "cidade": "Conceição de Macabu",
+                "ponto_referencia": "Nos fundos da academia Superação",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "111",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 41,
+                "projeto_id": 5,
+                "nome": "Chatuba",
+                "modalidade_id": 5,
+                "espaco_id": 28,
+                "bairro": "Chatuba",
+                "cidade": "São João da Barra",
+                "ponto_referencia": "Nos altos do Centro de Treinamento Espartanos.",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "72",
+                "aceitando_vagas": false
+        },
+        {
+                "id": 43,
+                "projeto_id": 5,
+                "nome": "Jóquei",
+                "modalidade_id": 5,
+                "espaco_id": 33,
+                "bairro": "Jóquei",
+                "cidade": "Campos dos Goytacazes",
+                "ponto_referencia": "Na escola de artes marciais FIGHT",
+                "ativo": true,
+                "vagas": "100",
+                "inscritos": "18",
+                "aceitando_vagas": false
+        }
+];
 
         const ESPACOS_CATALOGO_OFICIAL = [
-            { "id": 21, "nome": "Centro", "bairro": "Centro", "cidade": "São João da Barra", "uf": "RJ", "rua": "Rua João Patrício Delfim, 413", "ponto_referencia": "Ginásio Arlindo Aquino", "modalidade_id": 16 },
-            { "id": 22, "nome": "Conselheiro Josino", "bairro": "Conselheiro Josino", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Estrada do Quilombo", "ponto_referencia": "No Campo do Quilombo", "modalidade_id": 9 },
-            { "id": 23, "nome": "Batelão (Barra Seca)", "bairro": "Batelão (Barra Seca)", "cidade": "São Francisco de Itabapoana", "uf": "RJ", "rua": "Avenida Gabriel Paiva, 360", "ponto_referencia": "Tavares Futebol Society", "modalidade_id": 9 },
-            { "id": 24, "nome": "Vila Nova", "bairro": "Vila Nova", "cidade": "Conceição de Macabu", "uf": "RJ", "rua": "Rua Plácido Freire, 17", "ponto_referencia": "Nos fundos da academia Superação", "modalidade_id": 16 },
-            { "id": 25, "nome": "Saturnino Braga", "bairro": "Saturnino Braga", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Rodovia Deputado Paulo Albernaz", "ponto_referencia": "Ao lado da Paulinha Fashion", "modalidade_id": 9 },
-            { "id": 26, "nome": "SANTA CRUZ", "bairro": "Santa Cruz", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Avenida São Fidélis, 55", "ponto_referencia": "No Campo União de Santa Cruz", "modalidade_id": 9 },
-            { "id": 27, "nome": "KM 14 (Travessão)", "bairro": "KM 14 (Travessão)", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Rua Montes Verdes, 27", "ponto_referencia": "Na Praça João Pedro", "modalidade_id": 9 },
-            { "id": 28, "nome": "Chatuba", "bairro": "Chatuba", "cidade": "São João da Barra", "uf": "RJ", "rua": "Avenida Rotary, 625", "ponto_referencia": "Nos altos do CT Espartanos", "modalidade_id": 16 },
-            { "id": 29, "nome": "JOQUEI", "bairro": "Loteamento Sonho Dourado", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Av. Presidente Kennedy", "ponto_referencia": "Sonho Dourado", "modalidade_id": 9 },
-            { "id": 33, "nome": "Jóquei", "bairro": "Jóquei", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Avenida Presidente Kennedy, 85", "ponto_referencia": "Na escola de artes marciais FIGHT", "modalidade_id": 5 },
-            { "id": 34, "nome": "Santa Cruz II", "bairro": "Santa Cruz", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Avenida São Fidélis, 55", "ponto_referencia": "No Campo União de Santa Cruz", "modalidade_id": 9 },
-            { "id": 36, "nome": "Parque São Caetano", "bairro": "Parque São Caetano", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Rua Tenente Amaro Barreto", "ponto_referencia": "Ao lado da casa número 326", "modalidade_id": 5 },
-            { "id": 37, "nome": "Goitacazes", "bairro": "Goitacazes", "cidade": "Campos dos Goytacazes", "uf": "RJ", "rua": "Acelia, 2", "ponto_referencia": "Goitacazes", "modalidade_id": 5 },
-            { "id": 38, "nome": "Magalhães Bastos", "bairro": "Magalhães Bastos", "cidade": "Rio de Janeiro", "uf": "RJ", "rua": "Rua Tenente Pereira", "ponto_referencia": "Praça Bruno Lisboa / Lona Cultural", "modalidade_id": 5 },
-            { "id": 39, "nome": "Moquetá", "bairro": "Moquetá", "cidade": "Nova Iguaçu", "uf": "RJ", "rua": "Avenida Governador Roberto Silveira", "ponto_referencia": "UFRRJ Campus Nova Iguaçu", "modalidade_id": 5 },
-            { "id": 40, "nome": "Vargem Pequena", "bairro": "Vargem Pequena", "cidade": "Rio de Janeiro", "uf": "RJ", "rua": "Via H, 1", "ponto_referencia": "Rua da Clínica da Família", "modalidade_id": 5 },
-            { "id": 41, "nome": "Jardim Palmares", "bairro": "Jardim Palmares", "cidade": "Nova Iguaçu", "uf": "RJ", "rua": "Rua da Mangueira", "ponto_referencia": "Próximo ao Nº 326", "modalidade_id": 9 },
-            { "id": 42, "nome": "Parque Anchieta", "bairro": "Parque Anchieta", "cidade": "Rio de Janeiro", "uf": "RJ", "rua": "Rua Carolina Micaeles", "ponto_referencia": "Praça Granito/ em cima da lanchonete Ravis", "modalidade_id": 5 },
-            { "id": 43, "nome": "Taquara", "bairro": "Taquara", "cidade": "Rio de Janeiro", "uf": "RJ", "rua": "Rua dos Botanicos", "ponto_referencia": "Em frente a antiga pensão da Cris", "modalidade_id": 5 },
-            { "id": 44, "nome": "Jacaroá", "bairro": "Jacaroá", "cidade": "Maricá", "uf": "RJ", "rua": "Avenida Nero da Silva Bittencourt", "ponto_referencia": "Em frente a vila de pescador de Jacaroá", "modalidade_id": 5 }
-        ];
+        {
+                "id": 22,
+                "nome": "Conselheiro Josino",
+                "bairro": "Conselheiro Josino",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Estrada do Quilombo",
+                "numero": "0",
+                "cep": "28140000",
+                "ponto_referencia": "No Campo do Quilombo. Google Maps: 21°29'54.3\"S 41°18'55.0\"W",
+                "ativo": true
+        },
+        {
+                "id": 23,
+                "nome": "Batelão (Barra Seca)",
+                "bairro": "Batelão (Barra Seca)",
+                "cidade": "São Francisco de Itabapoana",
+                "rua": "Avenida Gabriel Paiva",
+                "numero": "360",
+                "cep": "28230000",
+                "ponto_referencia": "Tavares Futebol Socyte.",
+                "ativo": true
+        },
+        {
+                "id": 25,
+                "nome": "Saturnino Braga",
+                "bairro": "Saturnino Braga",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rodovia Deputado Paulo de Souza Albernaz",
+                "numero": "s/n",
+                "cep": "28140000",
+                "ponto_referencia": "Ao lado da loja Paulinha Fashion.",
+                "ativo": true
+        },
+        {
+                "id": 27,
+                "nome": "KM 15 (Travessão)",
+                "bairro": "KM 15",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "RUA C",
+                "numero": "S/N",
+                "cep": "28175000",
+                "ponto_referencia": "Loteamento rua 7",
+                "ativo": true
+        },
+        {
+                "id": 24,
+                "nome": "Vila Nova",
+                "bairro": "Vila Nova",
+                "cidade": "Conceição de Macabu",
+                "rua": "Rua Plácido Freire",
+                "numero": "17",
+                "cep": "28740000",
+                "ponto_referencia": "Nos fundos da academia Superação",
+                "ativo": true
+        },
+        {
+                "id": 26,
+                "nome": "SANTA CRUZ",
+                "bairro": "temp",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Avenida São Fidélis",
+                "numero": "55",
+                "cep": "28020-830",
+                "ponto_referencia": "No Campo União de Santa Cruz.",
+                "ativo": false
+        },
+        {
+                "id": 36,
+                "nome": "Parque São Caetano",
+                "bairro": "Parque São Caetano",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Rua Tenente Amaro Barreto",
+                "numero": "S/N",
+                "cep": "28051340",
+                "ponto_referencia": "Ao lado da casa número 326",
+                "ativo": true
+        },
+        {
+                "id": 29,
+                "nome": "JOQUEI",
+                "bairro": "Loteamento Sonho Dourado",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "xxxxxxx",
+                "numero": "00",
+                "cep": "28030-350",
+                "ponto_referencia": "",
+                "ativo": false
+        },
+        {
+                "id": 21,
+                "nome": "Centro",
+                "bairro": "Centro",
+                "cidade": "São João da Barra",
+                "rua": "Rua João Patrício Delfim",
+                "numero": "413",
+                "cep": "28200000",
+                "ponto_referencia": "Ginásio de Eventos Esportivos e Culturais Arlindo Aquino",
+                "ativo": true
+        },
+        {
+                "id": 28,
+                "nome": "Chatuba",
+                "bairro": "Chatuba",
+                "cidade": "São João da Barra",
+                "rua": "Avenida Rotary",
+                "numero": "625",
+                "cep": "28200000",
+                "ponto_referencia": "Nos altos do Centro de Treinamento Espartanos.",
+                "ativo": true
+        },
+        {
+                "id": 33,
+                "nome": "Jóquei",
+                "bairro": "Jóquei ",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Avenida Presidente Kennedy",
+                "numero": "85",
+                "cep": "28020010",
+                "ponto_referencia": "Na escola de artes marciais FIGHT",
+                "ativo": true
+        },
+        {
+                "id": 37,
+                "nome": "Goitacazes",
+                "bairro": "Goitacazes",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "acelia",
+                "numero": "2",
+                "cep": "28110000",
+                "ponto_referencia": "",
+                "ativo": false
+        },
+        {
+                "id": 38,
+                "nome": "Magalhães Bastos",
+                "bairro": "Magalhães Bastos",
+                "cidade": "Rio de Janeiro",
+                "rua": "Rua Tenente Pereira",
+                "numero": "S/N",
+                "cep": "21750180",
+                "ponto_referencia": "Nos altos, na praça  Bruno de Almeida Lisboa, ao lado da lona cultural.",
+                "ativo": false
+        },
+        {
+                "id": 34,
+                "nome": "Santa Cruz",
+                "bairro": "Santa Cruz",
+                "cidade": "Campos dos Goytacazes",
+                "rua": "Avenida São Fidélis",
+                "numero": "55",
+                "cep": "28057283",
+                "ponto_referencia": "No Campo União de Santa Cruz",
+                "ativo": true
+        },
+        {
+                "id": 39,
+                "nome": "Moquetá",
+                "bairro": "Moquetá",
+                "cidade": "Nova Iguaçu",
+                "rua": "Avenida Governador Roberto Silveira",
+                "numero": "S/N",
+                "cep": "26020740",
+                "ponto_referencia": "UFRRJ Campus Nova Iguaçu",
+                "ativo": true
+        },
+        {
+                "id": 40,
+                "nome": "Vargem Pequena",
+                "bairro": "Vargem Pequena",
+                "cidade": "Rio de Janeiro",
+                "rua": "Via H",
+                "numero": "1",
+                "cep": "22783116",
+                "ponto_referencia": "Rua da Clínica da família",
+                "ativo": false
+        },
+        {
+                "id": 46,
+                "nome": "Realengo",
+                "bairro": "Realengo",
+                "cidade": "Rio de Janeiro",
+                "rua": "Estrada dos Teixeiras",
+                "numero": "1291",
+                "cep": "22723205",
+                "ponto_referencia": "dentro do Sítio do Beto",
+                "ativo": true
+        },
+        {
+                "id": 44,
+                "nome": "Jacaroá",
+                "bairro": "Jacaroá",
+                "cidade": "Maricá",
+                "rua": "Avenida Nero da Silva Bittencourt",
+                "numero": "1161",
+                "cep": "24902585",
+                "ponto_referencia": "Em frente a vila de pescador de Jacaroá",
+                "ativo": true
+        },
+        {
+                "id": 43,
+                "nome": "Taquara",
+                "bairro": "Taquara",
+                "cidade": "Rio de Janeiro",
+                "rua": "Rua dos Botanicos",
+                "numero": "98",
+                "cep": "22723575",
+                "ponto_referencia": "Em frente a antiga pensão da Cris",
+                "ativo": true
+        },
+        {
+                "id": 41,
+                "nome": "Jardim Palmares",
+                "bairro": "Jardim Palmares",
+                "cidade": "Nova Iguaçu",
+                "rua": "Rua dos Limoeiros",
+                "numero": "S/N",
+                "cep": "26277600",
+                "ponto_referencia": "Próximo ao mercado casa do sabão",
+                "ativo": true
+        },
+        {
+                "id": 42,
+                "nome": "Parque Anchieta",
+                "bairro": "Parque Anchieta",
+                "cidade": "Rio de Janeiro",
+                "rua": "Rua Carolina Micaeles",
+                "numero": "26",
+                "cep": "21625140",
+                "ponto_referencia": "Praça Granito/ em cima da lanchonete Ravis",
+                "ativo": true
+        },
+        {
+                "id": 45,
+                "nome": "CAMPO LINDO",
+                "bairro": "CAMPO LINDO",
+                "cidade": "Seropédica",
+                "rua": "RUA A",
+                "numero": "S/N",
+                "cep": "23890000",
+                "ponto_referencia": "Campo do Olaria",
+                "ativo": true
+        }
+];
 
         // Cache global de dados — inicializado previamente com o catálogo oficial
         let _cacheEspacos = [...ESPACOS_CATALOGO_OFICIAL];
@@ -2215,7 +2699,7 @@
         function garantirCachesCarregados() {
             if (_promiseCaches) return _promiseCaches;
 
-            const fetchWithTimeout = (url, opts = {}, ms = 7000) => {
+            const fetchWithTimeout = (url, opts = {}, ms = 15000) => {
                 const ctrl = new AbortController();
                 const timer = setTimeout(() => ctrl.abort(), ms);
                 return fetch(url, { ...opts, signal: ctrl.signal })
@@ -3270,6 +3754,10 @@
                         (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
                         (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                         (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                    ) || ESPACOS_CATALOGO_OFICIAL.find(e => 
+                        (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                        (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                        (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
                     );
                     return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
                 }
@@ -3505,6 +3993,10 @@
                     (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
                     (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                     (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                ) || ESPACOS_CATALOGO_OFICIAL.find(e => 
+                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
                 );
                 return (esp?.cidade && String(esp.cidade).trim()) || (n.cidade && String(n.cidade).trim()) || '';
             }
@@ -3654,7 +4146,11 @@
             modalidades.forEach(m => { if (m.id && m.nome) modMap[m.id] = m.nome; });
 
             function resolverEspaco(n) {
-                return espacos.find(e => 
+                return (espacos || []).find(e => 
+                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                ) || (ESPACOS_CATALOGO_OFICIAL || []).find(e => 
                     (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
                     (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                     (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
@@ -3771,6 +4267,10 @@
 
             function resolverEspaco(n) {
                 return (espacos || []).find(e => 
+                    (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
+                    (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
+                    (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
+                ) || (ESPACOS_CATALOGO_OFICIAL || []).find(e => 
                     (n.espaco_id && String(e.id) === String(n.espaco_id)) || 
                     (n.bairro_id && String(e.id) === String(n.bairro_id)) || 
                     (n.nome && e.nome && n.nome.trim().toLowerCase() === e.nome.trim().toLowerCase())
