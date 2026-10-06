@@ -2078,7 +2078,7 @@
          ========================================================================== -->
     <script>
         // ── CONTROLE AUTOMÁTICO DE VERSÃO & LIMPEZA DE CACHE ──
-        const APP_BUILD_VERSION = '2026.10.05_gasctpna_v6';
+        const APP_BUILD_VERSION = '2026.10.06_gasctpna_v7';
         try {
             const lastVer = localStorage.getItem('gasctpna_app_version');
             if (lastVer !== APP_BUILD_VERSION) {
@@ -4279,7 +4279,7 @@
 
             ativos.forEach((n, idx) => {
                 const esp = resolverEspaco(n);
-                const bairroNome = (esp?.bairro && esp.bairro !== 'temp') ? esp.bairro : (n.bairro && n.bairro !== 'temp' ? n.bairro : (esp?.nome || n.nome || 'Núcleo Central'));
+                const bairroNome = (n.nome && n.nome.trim() && n.nome !== 'temp') ? n.nome.trim() : ((esp?.bairro && esp.bairro !== 'temp') ? esp.bairro : (esp?.nome || 'Núcleo Central'));
                 const refLocal = n.ponto_referencia || esp?.ponto_referencia || esp?.endereco || esp?.rua || 'Núcleo Oficial GASCTPNA';
 
                 const infoVagas = calcularVagasNucleo(n);
